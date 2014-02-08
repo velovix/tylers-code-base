@@ -1,0 +1,81 @@
+@import url(http://fonts.googleapis.com/css?family=Play|Open+Sans:400italic,400,700);
+
+body {
+	background-color:black;
+	color:white;
+
+	background-image:url('/public/images/LeftBackground.png'), url('/public/images/RightBackground.png');
+	background-attachment:fixed, fixed;
+	background-position:left, right;
+	background-repeat:repeat-y, repeat-y;
+
+	height:100%;
+}
+
+header {
+	text-align:center;
+
+	font-family: 'Play', sans-serif;
+}
+
+header .title {
+	background-image:url('/public/images/TextBanner.png');
+	background-repeat:no-repeat;
+	width:504px;
+	height:96px;
+
+	height:100%;
+	display:inline-block;
+	vertical-align:middle;
+}
+
+header .title h1 {
+	vertical-align:middle;
+	text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+header nav {
+	margin-top:15px;
+	font-size:18px;
+}
+
+header nav a {
+	margin-left:15px;
+	margin-right:15px;
+	text-decoration:none;
+}
+
+header nav a:link {
+	color:#99cc66;
+}
+
+header nav a:visited {
+	color:#99cc66;
+}
+
+header nav a:hover {
+	color:#B0F880;
+	text-decoration:underline;
+}
+
+header nav a:active {
+	color:#385000;
+}
+
+article {
+	font-family: 'Open Sans', sans-serif;
+
+	margin-top:30px;
+	max-width:800px;
+
+	margin-left:auto;
+	margin-right:auto;
+}
+
+article p.images {
+	text-align:center;
+}
+
+footer {
+	text-align:center;
+}
