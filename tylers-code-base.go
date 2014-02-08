@@ -25,5 +25,5 @@ func main() {
 	http.Handle("/favicon.ico", favicon)
 	http.Handle("/public/", sd)
 
-	http.ListenAndServe(":80", nil)
+	http.ListenAndServe(":3000", nil)
 }
