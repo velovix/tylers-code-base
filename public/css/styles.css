@@ -45,20 +45,20 @@ header nav a {
 	text-decoration:none;
 }
 
-header nav a:link {
+a:link {
 	color:#99cc66;
 }
 
-header nav a:visited {
+a:visited {
 	color:#99cc66;
 }
 
-header nav a:hover {
+a:hover {
 	color:#B0F880;
 	text-decoration:underline;
 }
 
-header nav a:active {
+a:active {
 	color:#385000;
 }
 
