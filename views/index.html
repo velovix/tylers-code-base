@@ -14,7 +14,7 @@
 
 	<body>
 		<header>
-			<div class="title"><h1>Tyler's Code Base</h1></div>
+			<div id="title" class="title"><h1>Tyler's Code Base</h1></div>
 			<nav>
 				<a href="javascript:void(0)" data-page="home">Home</a>
 				<a href="javascript:void(0)" data-page="projects">Projects</a>
@@ -32,6 +32,9 @@
 	</body>
 
 	<script>
+
+	var textBannerWidth = 0
+
 	function loadPage(page) {
 		$.get("/public/ajax/"+page+".html", function(data) {
 			$('article').fadeOut(200, function() {
@@ -45,12 +48,26 @@
 
 	loadPage('home')
 
+	var textBanner = new Image()
+	textBanner.onload = function() {
+		textBannerWidth = textBanner.width
+	}
+	textBanner.src = '/public/images/TextBanner.png'
+
 	$('a').on('click', function() {
 		if($(this).data('page') == null) {
 			return
 		}
 
 		loadPage($(this).data('page'))
+	})
+
+	$(window).resize(function() {
+		if($(window).width() < textBannerWidth) {
+			$('#title').attr('class', 'mobile-title')
+		} else if($('#title').attr('class') == 'mobile-title') {
+			$('#title').attr('class', 'title')
+		}
 	})
 
 	})
