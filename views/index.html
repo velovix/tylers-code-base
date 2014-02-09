@@ -51,6 +51,11 @@
 	var textBanner = new Image()
 	textBanner.onload = function() {
 		textBannerWidth = textBanner.width
+		if($(window).width() < textBannerWidth) {
+			$('#title').attr('class', 'mobile-title')
+		} else {
+			$('#title').attr('class', 'title')
+		}
 	}
 	textBanner.src = '/public/images/TextBanner.png'
 
