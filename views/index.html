@@ -33,9 +33,13 @@
 
 	<script>
 
+	var currentPage
 	var textBannerWidth = 0
+	var defaultTextWidth
 
 	function loadPage(page) {
+		currentPage = page
+
 		$.get("/public/ajax/"+page+".html", function(data) {
 			$('article').fadeOut(200, function() {
 				$('article').html(data)
@@ -47,6 +51,14 @@
 	jQuery(document).ready(function() {
 
 	loadPage('home')
+	$('[data-page="home"]').addClass("inactive")
+
+	defaultTextWidth = $('article').css('max-width')
+	if($(window).width()-100 < parseInt(defaultTextWidth)) {
+		$('body').css("background-position", "-9999px, -9999px");
+	} else {
+		$('body').css("background-position", "left, right");
+	}
 
 	var textBanner = new Image()
 	textBanner.onload = function() {
@@ -64,7 +76,11 @@
 			return
 		}
 
-		loadPage($(this).data('page'))
+		if($(this).data('page') != currentPage && !$(this).hasClass("inactive")) {
+			$('[data-page="'+currentPage+'"]').removeClass("inactive")
+			loadPage($(this).data('page'))
+			$(this).addClass("inactive")
+		}
 	})
 
 	$(window).resize(function() {
@@ -73,7 +89,19 @@
 		} else if($('#title').attr('class') == 'mobile-title') {
 			$('#title').attr('class', 'title')
 		}
+
+		if($(window).width()-100 < parseInt(defaultTextWidth)) {
+			$('body').css("background-position", "-9999px, -9999px");
+		} else {
+			$('body').css("background-position", "left, right");
+		}
 	})
+
+	function test(event) {
+		alert("touch!")
+	}
+
+	document.getElementsByTagName('article').addEventListener('touchmove', test, false);
 
 	})
 	</script>
