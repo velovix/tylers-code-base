@@ -1,0 +1,39 @@
+<h2>Paunch</h2>
+
+<p>
+	Paunch is a game library written in Go and C++. I'm writing it primarily
+	for my own use later on, but it's written with the intent that it'd be
+	usable as a general 2D game engine. The Go code can be found on my Github
+	<a href="http://github.com/velovix/paunch">here</a> and the C++ code is
+	<a href="http://github.com/velovix/paunch-cpp">here!</a>
+</p>
+
+<p>
+	In the future, the C++ implementation of Paunch will be primarily
+	supported, but I may update the Go implementation sometime in the future.
+</p>
+
+<p>
+	Paunch's power comes from it's simplicity. I've tried to put power in the
+	hands of the user when needed, and automate the rest. The following code
+	opens a new window in C++.
+</p>
+
+
+<div class="code">
+	#include &#60;paunch.h&#62;<br />
+	<br />
+	int main() {
+	<div class="tabbed">
+		paunch::Window window(640, 480, 640, 480, false, "Test Window");<br />
+		<br />
+		window.Open();<br />
+		<br />
+		while(!window.ShouldClose()) {<br />
+		<div class="tabbed">
+			window.UpdateEvent();<br />
+		</div>
+		}<br />
+	</div>
+	}
+</div>
