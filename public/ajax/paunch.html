@@ -1,39 +1,41 @@
 <h2>Paunch</h2>
 
 <p>
-	Paunch is a game library written in Go and C++. I'm writing it primarily
-	for my own use later on, but it's written with the intent that it'd be
-	usable as a general 2D game engine. The Go code can be found on my Github
-	<a href="http://github.com/velovix/paunch">here</a> and the C++ code is
-	<a href="http://github.com/velovix/paunch-cpp">here!</a>
-</p>
-
-<p>
-	In the future, the C++ implementation of Paunch will be primarily
-	supported, but I may update the Go implementation sometime in the future.
+	Paunch is a game library written in Go. I'm writing it primarily for my own
+	use later on, but it's written with the intent that it'd be usable as a
+	general 2D game engine. The Go code can be found on my Github
+	<a href="http://github.com/velovix/paunch">here!</a>
 </p>
 
 <p>
 	Paunch's power comes from it's simplicity. I've tried to put power in the
 	hands of the user when needed, and automate the rest. The following code
-	opens a new window in C++.
+	opens a new window.
 </p>
 
-
 <div class="code">
-	#include &#60;paunch.h&#62;<br />
+	import "github.com/velovix/paunch"<br />
 	<br />
-	int main() {
+	func main() {
 	<div class="tabbed">
-		paunch::Window window(640, 480, 640, 480, false, "Test Window");<br />
+		paunch.SetWindowSize(960, 540)<br />
+		paunch.SetWindowTitle("Trinosaurs")<br />
 		<br />
-		window.Open();<br />
+		paunch.Start()<br />
 		<br />
-		while(!window.ShouldClose()) {<br />
+		for !paunch.ShouldClose() {<br />
 		<div class="tabbed">
-			window.UpdateEvent();<br />
+			paunch.UpdateEvents()<br />
 		</div>
 		}<br />
 	</div>
 	}
 </div>
+
+<p>
+	There also exists an unfinished C++ implementation found
+	<a href="http://github.com/velovix/paunch-cpp">here</a>,
+	but it mostly exists for experimentation purposes. It may be buggy or
+	unstable, so I would not recommend using it as anything but a base for your
+	own development.
+</p>
