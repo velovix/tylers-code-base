@@ -21,10 +21,11 @@ header {
 header .title {
 	background-image:url('/public/images/TextBanner.png');
 	background-repeat:no-repeat;
+
 	width:504px;
 	height:96px;
-
 	height:100%;
+
 	display:inline-block;
 	vertical-align:middle;
 }
@@ -99,8 +100,11 @@ footer {
 
 div.code {
 	font-family:"Courier New", Courier, monospace;
+
 	background-color:#F0F0F0;
+
 	padding:5px;
+
 	border-radius:5px;
 	border-style:solid;
 	border-width:1px;
