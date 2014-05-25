@@ -1,0 +1,183 @@
+<h2>Introduction</h2>
+<p>
+	This article is for people who want to know how to get started using Paunch. Paunch is a powerful
+	and easy to use 2D game library written in Go.
+</p>
+
+<h2>Table of Contents</h2>
+<il class="table-of-contents">
+	<li><a href="#chapter0">Chapter 0: Installation</a></li>
+	<li><a href="#chapter1">Chapter 1: Starting Paunch</a></li>
+	<li><a href="#chapter2">Chapter 2: Drawing Simple Shapes</a></li>
+	<li><a href="#chapter3">Chapter 3: Displaying Images and Animation</a></li>
+	<li><a href="#chapter4">Chapter 4: Receiving User Input</a></li>
+	<li><a href="#chapter5">Chapter 5: Movement</a></li>
+	<li><a href="#chapter6">Chapter 6: Collisions</a></li>
+	<li><a href="#chapter7">Chapter 7: Effects</a></li>
+	<li><a href="#chapter8">Chapter 8: Menus</a></li>
+</il>
+
+<a name="chapter0"></a>
+<h2>Chapter 0: Installation</h2>
+<p>
+	Paunch has a couple dependencies that need to be satisfied before it can be properly installed.
+</p>
+<h3>GLFW 3</h3>
+<p>
+	Paunch uses a Go binding for GLFW 3 that, being a binding, requires the installation of the C library
+	first. There are a few special things that need to be done to accomplish this, but discussing them in
+	detail is beyond the scope of this article. Please see their repository, which can be found
+	<a href="http://github.com/go-gl/glfw3">here</a>, for details.
+</p>
+<p>
+	Once you've installed the GLFW 3 C library, you can install the Go bindings by using:<br />
+	<div class="code">go get github.com/go-gl/glfw3</div>
+</p>
+<h3>OpenGL 3.3</h3>
+<p>
+	Installing the Go binding for OpenGL 3.3 is significantly easier than installing the ones for GLFW 3,
+	because your computer should already have the correct OpenGL C libraries installed. Installing these
+	bindings is as easy as running the command:
+	<div class="code">go get github.com/chsc/gl33</div>
+</p>
+<h3>OpenAL</h3>
+<p>
+	Paunch uses a Go binding for OpenAL, as well. Just like with GLFW, you'll first have to install the
+	C library,
+	<a href="http://kcat.strangesoft.net/openal.html">OpenAL Soft.</a>
+</p>
+<p>
+	Once you've installed OpenAL Soft, you can install the Go bindings by using:
+	<div class="code">go get github.com/vova616/go-openal/openal</div>
+</p>
+<h3>Vorbis</h3>
+<p>
+	This final library is an easy install. It may actually be done automatically by "go get", but just
+	in case, you can install the vorbis library by running:
+	<div class="code">go get github.com/velovix/vorbis</div>
+</p>
+<h3>The Library</h3>
+<p>
+	Once you've installed the bindings, run:
+	<div class="code">go get github.com/velovix/paunch</div>
+</p>
+
+<a name="chapter1"></a>
+<h2>Chapter 1: Starting Paunch</h2>
+<p>
+	Before we get into the meat and potatoes of how Paunch works, we must first get the library running.
+	The process is very simple and can be generalized into two steps: setting up a few properties and
+	having Paunch run with these properties.
+</p>
+<p>
+	The only properties we need to set for a simple example like this are the size of the window that will
+	be created and the title of that window. This can be done using two simple commands.
+	<div class="code">
+		paunch.SetWindowSize(640, 480)<br />
+		paunch.SetWindowTitle("Test")<br />
+	</div>
+</p>
+<p>
+	Then just call the Start function, which will open the window and initialize a few other things that will
+	be useful in the future. You probably want to check for errors.
+	<div class="code">
+		err := paunch.Start()<br />
+		if err != nil {
+		<div class="tabbed">
+			panic(err)
+		</div>
+		}
+	</div>
+</p>
+<p>
+	Right now, your code might look something like this:
+	<div class="code">
+		package main<br /><br />
+
+		import "github.com/velovix/paunch"<br /><br />
+
+		func main() {<br />
+		<div class="tabbed">
+			paunch.SetWindowSize(640, 480)<br />
+			paunch.SetWindowTitle("Test")<br />
+			<br />
+			err := paunch.Start()<br />
+			if err != nil {
+			<div class="tabbed">
+				panic(err)
+			</div>
+			}
+		</div>
+		}
+	</div>
+</p>
+<p>
+	The code will compile, but if you run it, all you'll see is a window appear and disappear. That
+	probably isn't what we want. What we need to is create a main loop. A main loop is a common programming
+	term describing a loop that checks for events and keeps the program alive until it needs to stop
+	(like when the user closes the window). Making a responsive main loop is easy in Paunch. The following
+	is an example of a program that creates a window and waits for the user to close the window.
+	<div class="code">
+		package main<br /><br />
+
+		import "github.com/velovix/paunch"<br /><br />
+
+		func main() {<br />
+		<div class="tabbed">
+			paunch.SetWindowSize(640, 480)<br />
+			paunch.SetWindowTitle("Test")<br />
+			<br />
+			err := paunch.Start()<br />
+			if err != nil {
+			<div class="tabbed">
+				panic(err)
+			</div>
+			}<br />
+			<br />
+			for !paunch.ShouldClose() {
+			<div class="tabbed">
+				paunch.UpdateEvents()
+			</div>
+			}
+		</div>
+		}
+	</div>
+</p>
+<p>
+	This code uses the ShouldClose function, which returns true if Paunch has received a close event from
+	the user. Paunch reads polled user events every time the UpdateEvents function is called.
+</p>
+
+<a name="chapter2"></a>
+<h2>Chapter 2: Drawing Simple Shapes</h2>
+<p>
+	Paunch uses OpenGL to render graphics on the backend, but uses a decidedly un-OpenGL system on the
+	frontend. Most graphics operations are handled using Renderable objects, which are objects that contain
+	the data necessary to be drawn on screen. Renderable objects need to be created using an appropriate
+	function (i.e. NewRenderable or NewRenderableSurface) before being used.
+</p>
+<p>
+	Let's say we want to make a program that draws a hollow square on the bottom-left of the screen.
+</p>
+
+<a name="chapter3"></a>
+<h2>Chapter 3: Displaying Images and Animation</h2>
+
+<a name="chapter4"></a>
+<h2>Chapter 4: Receiving User Input</h2>
+
+<a name="chapter5"></a>
+<h2>Chapter 5: Movement</h2>
+
+<a name="chapter6"></a>
+<h2>Chapter 6: Collisions</h2>
+
+<a name="chapter7"></a>
+<h2>Chapter 7: Effects</h2>
+
+<a name="chapter8"></a>
+<h2>Chapter 8: Menus</h2>
+
+<script>
+	var docTitle = "Paunch User Guide"
+</script>
