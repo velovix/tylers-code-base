@@ -13,7 +13,7 @@
 
 	<body>
 		<header>
-			<div class="title">Tyler's Code Base Documentation</div>
+			<div class="title"></div>
 		</header>
 
 		<article></article>
@@ -38,9 +38,14 @@
 		currentPage = page
 
 		$.get("/public/ajax/"+page+"_doc.html", function(data) {
-			$('article').fadeOut(200, function() {
-				$('article').html(data)
-				$('article').fadeIn()
+			$('.title').fadeOut(200, function() {
+				$('article').fadeOut(200, function() {
+					$('article').html(data)
+					$('.title').html(docTitle)
+					$('.title').fadeIn(200, function() {
+						$('article').fadeIn()
+					})
+				})
 			})
 		})
 	}
