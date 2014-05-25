@@ -11,6 +11,8 @@ func main() {
 		panic(err)
 	}
 
+	documentation, err := NewResponse("./views/documentation.html")
+
 	favicon, icoErr := NewResponse("./public/favicon.ico")
 	if err != nil {
 		panic(icoErr)
@@ -22,6 +24,7 @@ func main() {
 	}
 
 	http.Handle("/", homepage)
+	http.Handle("/docs", documentation)
 	http.Handle("/favicon.ico", favicon)
 	http.Handle("/public/", sd)
 

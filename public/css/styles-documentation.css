@@ -1,0 +1,75 @@
+@import url(http://fonts.googleapis.com/css?family=Play|Open+Sans:400italic,400,700);
+
+body {
+	margin:0px;
+}
+
+header {
+	background-color:black;
+	background-image:url('/public/images/LeftBackground.png'), url('/public/images/RightBackground.png');
+	background-attachment:fixed, fixed;
+	background-position:left, right;
+	background-repeat:repeat-y, repeat-y;
+
+	height:60px;
+}
+
+header div.title {
+	text-align:center;
+	font-family: 'Play', sans-serif;
+	color:white;
+	font-size:30px;
+	padding-top:10px;
+}
+
+article {
+	margin-left:30px;
+	margin-right:30px;
+}
+
+footer {
+	text-align:center;
+}
+
+div.code {
+	font-family:"Courier New", Courier, monospace;
+	background-color:#F0F0F0;
+	padding:5px;
+	border-radius:5px;
+	border-style:solid;
+	border-width:1px;
+	border-color:#B1B1B1;
+}
+
+div.tabbed {
+	margin-left:20px;
+}
+
+il.table-of-contents {
+	list-style:none;
+}
+
+il.table-of-contents li {
+	border-radius:3px;
+	background-color:#F0F0F0;
+	max-width:400px;
+	padding:3px;
+	margin:3px;
+}
+
+a:link {
+	color:#009900;
+}
+
+a:visited {
+	color:#009900;
+}
+
+a:hover {
+	color:#009900;
+	text-decoration:underline;
+}
+
+a:active {
+	color:#333399;
+}
