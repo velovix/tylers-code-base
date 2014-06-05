@@ -12,10 +12,13 @@ func main() {
 	}
 
 	documentation, err := NewResponse("./views/documentation.html")
-
-	favicon, icoErr := NewResponse("./public/favicon.ico")
 	if err != nil {
-		panic(icoErr)
+		panic(err)
+	}
+
+	favicon, err := NewResponse("./public/favicon.ico")
+	if err != nil {
+		panic(err)
 	}
 
 	sd, err := NewStaticDirectory("./public/", "/public/")
