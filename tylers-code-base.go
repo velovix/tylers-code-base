@@ -5,10 +5,17 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
+)
+
+const (
+	DefaultViewCount = 0
+	DefaultPort      = 3000
 )
 
 var (
 	viewCount int
+	port      int
 )
 
 func addView(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +29,7 @@ func loadConfigFile() {
 
 	file, err := os.Open("./config.json")
 	if err != nil {
-		saveConfigFile()
+		newConfigFile()
 		loadConfigFile()
 		return
 	}
@@ -36,6 +43,7 @@ func loadConfigFile() {
 	}
 
 	viewCount = int(config["viewCount"].(float64))
+	port = int(config["port"].(float64))
 }
 
 func saveConfigFile() {
@@ -49,6 +57,26 @@ func saveConfigFile() {
 
 	config := make(map[string]interface{})
 	config["viewCount"] = viewCount
+	config["port"] = port
+
+	err = encoder.Encode(config)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func newConfigFile() {
+
+	file, err := os.Create("./config.json")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	encoder := json.NewEncoder(file)
+
+	config := make(map[string]interface{})
+	config["viewCount"] = DefaultViewCount
+	config["port"] = DefaultPort
 
 	err = encoder.Encode(config)
 	if err != nil {
@@ -86,5 +114,5 @@ func main() {
 	http.Handle("/favicon.ico", favicon)
 	http.Handle("/public/", sd)
 
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }
