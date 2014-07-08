@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -17,13 +18,6 @@ var (
 	viewCount int
 	port      int
 )
-
-func addView(w http.ResponseWriter, r *http.Request) {
-
-	viewCount++
-	fmt.Fprintf(w, "%v", viewCount)
-	saveConfigFile()
-}
 
 func loadConfigFile() {
 
@@ -50,7 +44,7 @@ func saveConfigFile() {
 
 	file, err := os.Create("./config.json")
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	defer file.Close()
 	encoder := json.NewEncoder(file)
@@ -69,7 +63,7 @@ func newConfigFile() {
 
 	file, err := os.Create("./config.json")
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	defer file.Close()
 	encoder := json.NewEncoder(file)
@@ -84,16 +78,20 @@ func newConfigFile() {
 	}
 }
 
+func addView(w http.ResponseWriter, r *http.Request) {
+
+	viewCount++
+	fmt.Fprintf(w, "%v", viewCount)
+	saveConfigFile()
+}
+
 func main() {
+
+	log.SetFlags(log.Ldate | log.Ltime)
 
 	loadConfigFile()
 
 	homepage, err := NewResponse("./views/index.html")
-	if err != nil {
-		panic(err)
-	}
-
-	documentation, err := NewResponse("./views/documentation.html")
 	if err != nil {
 		panic(err)
 	}
@@ -108,9 +106,11 @@ func main() {
 		panic(err)
 	}
 
+	docPage := DocPage{}
+
 	http.HandleFunc("/addView", addView)
 	http.Handle("/", homepage)
-	http.Handle("/docs", documentation)
+	http.Handle("/docs/", docPage)
 	http.Handle("/favicon.ico", favicon)
 	http.Handle("/public/", sd)
 
