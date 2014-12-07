@@ -1,0 +1,232 @@
+<h2>Introduction</h2>
+
+<p>
+	Huesvr is an API designed to allow for Phillips Hue lights to be controlled
+	remotely. Lights can be controlled manually by turning them on and off and
+	setting RGB color values. Patterns are also provided.
+</p>
+
+<h2>Table of Contents</h2>
+<il class="table-of-contents">
+	<li><a href="#communication-basics">Communication Basics</a></li>
+	<li><a href="#data-structure">Data Structure</a></li>
+</il>
+
+<a name="communication-basics"></a>
+<h2>Communication Basics</h2>
+
+<p>
+	Huesvr is controlled through standard POST requests with a JSON data structure
+	inside of them. How this is done depends on what language and platform you are
+	using.
+</p>
+
+<p>
+	For Google Scripts, a POST request would look something like this:
+
+	<div class="code">
+		// Our command data<br />
+		var data = {<br />
+		<div class="tabbed">
+			"Lights": [0, 1, 2],<br />
+			"Action": "off",<br />
+			"TransitionTime1": 1000<br />
+		</div>
+		}<br />
+		// Turn it into a JSON string<br />
+		var jsonData = JSON.stringify(data)<br /><br />
+
+		// Options for the POST request<br />
+		var options = {<br />
+		<div class="tabbed">
+			"method": "post",<br />
+			"payload": jsonData,<br />
+			"contentType": "application/json"<br />
+		</div>
+		}<br /><br />
+
+		// Send the POST request to your huesvr<br />
+		UrlFetchApp.fetch("http://mydomain.com/", options)
+	</div>
+</p>
+
+<p>
+	For Go, it would look like this:
+	<div class="code">
+		// import "bytes", "net/http", and "encoding/json" somewhere<br /><br />
+
+		// Create a JSON string from a hashmap<br />
+		data, err := json.Marshal(map[string]interface{}{<br />
+		<div class="tabbed">
+			"Lights":         []int{0, 1, 2},<br />
+			"Action":         "off",<br />
+			"TransitionTime": 1000})<br />
+		</div>
+		if err != nil {<br />
+		<div class="tabbed">
+			panic(err)<br />
+		</div>
+		}<br /><br />
+
+		// Create a new reader from the JSON data<br />
+		reader := bytes.NewReader(data)<br /><br />
+
+		// Make the POST request<br />
+		_, err = http.Post("http://mydomain.com/", "application/json", reader)<br />
+		if err != nil {<br />
+		<div class="tabbed">
+			panic(err)<br />
+		</div>
+		}<br />
+	</div>
+</p>
+
+<a name="data-structure"></a>
+<h2>Data Structure</h2>
+
+<h3>Lights</h3>
+<div class="tabbed">
+	<p>
+		Required: yes<br />
+		Type: number array<br />
+		Accepted Values: [0, ∞)
+	</p>
+	<p>
+		An array of light IDs. These lights will be the only ones affected by
+		the command except for if the Action parameter is set to "colorloop",
+		in which case all lights are always affected.
+	</p>
+</div>
+
+<h3>Action</h3>
+<div class="tabbed">
+	<p>
+		Required: yes<br />
+		Type: string<br />
+		Accepted Values: "on", "off", "blink", "alternate", "colorloop"
+	</p>
+	<p>
+		The action that will be performed on the lights. "on" turns the
+		selected lights on. "off" turns the selected lights off. "blink"
+		alternates between a given color and the off state. "alternate"
+		alternates between the two given colors. "colorloop" rotates a color
+		across the lights in order.
+	</p>
+</div>
+
+<h3>TransitionTime</h3>
+<div class="tabbed">
+	<p>
+		Required: yes<br />
+		Type: number<br />
+		Accepted Values: [1, 5000]
+	</p>
+	<p>
+		This value controls how long it takes for lights to transition between
+		different states. This value is measured in milliseconds.
+	</p>
+</div>
+
+<h3>R</h3>
+<div class="tabbed">
+	<p>
+		Required: unless "off" is used<br />
+		Type: number<br />
+		Accepted Values: [0, 255]
+	</p>
+	<p>
+		The R value of the first color.
+	</p>
+</div>
+
+<h3>G</h3>
+<div class="tabbed">
+	<p>
+		Required: unless "off" is used<br />
+		Type: number<br />
+		Accepted Values: [0, 255]
+	</p>
+	<p>
+		The G value of the first color.
+	</p>
+</div>
+
+<h3>B</h3>
+<div class="tabbed">
+	<p>
+		Required: unless "off" is used<br />
+		Type: number<br />
+		Accepted Values: [0, 255]
+	</p>
+	<p>
+		The B value of the first color.
+	</p>
+</div>
+
+<h3>R2</h3>
+<div class="tabbed">
+	<p>
+		Required: only if "alternate" is used<br />
+		Type: number<br />
+		Accepted Values: [0, 255]
+	</p>
+	<p>
+		The R value of the second color.
+	</p>
+</div>
+
+<h3>G2</h3>
+<div class="tabbed">
+	<p>
+		Required: only if "alternate" is used<br />
+		Type: number<br />
+		Accepted Values: [0, 255]
+	</p>
+	<p>
+		The G value of the second color.
+	</p>
+</div>
+
+<h3>B2</h3>
+<div class="tabbed">
+	<p>
+		Required: only if "alternate" is used<br />
+		Type: number<br />
+		Accepted Values: [0, 255]
+	</p>
+	<p>
+		The B value of the second color.
+	</p>
+</div>
+
+<h3>BlinkCount</h3>
+<div class="tabbed">
+	<p>
+		Required: if "blink", "alternate", or "colorloop" are used<br />
+		Type: number<br />
+		Accepted Values: [1, 10]
+	</p>
+	<p>
+		If the action value is "blink", this value controls how many times the
+		light should be blinking. If the action value is "alternate", this
+		value controls how often the lights should go through an alternating
+		cycle. If the action value is "colorloop", this value controls how many
+		full loops should be performed.
+	</p>
+</div>
+
+<h3>BlinkDelay</h3>
+<div class="tabbed">
+	<p>
+		Required: if "blink", "alternate", or "colorloop" are used<br />
+		Type: number<br />
+		Accepted Values: [1, 5000]
+	</p>
+	<p>
+		If the action value is "blink", BlinkDelay controls how long the light
+		should be on and off. If the action value is "alternate", BlinkDelay
+		controls how long each color should be on. If the action value is
+		"colorloop", BlinkDelay controls how long the color should be at each
+		bulb. This value is measured in milliseconds.
+	</p>
+</div>
