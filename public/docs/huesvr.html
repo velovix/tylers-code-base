@@ -84,6 +84,18 @@
 <a name="data-structure"></a>
 <h2>Data Structure</h2>
 
+<h3>Key</h3>
+<div class="tabbed">
+	<p>
+		Required: yes<br />
+		Type: string<br />
+		Accepted Values: any string
+	</p>
+	<p>
+		The password for accessing the light server.
+	</p>
+</div>
+
 <h3>Lights</h3>
 <div class="tabbed">
 	<p>
@@ -93,8 +105,8 @@
 	</p>
 	<p>
 		An array of light IDs. These lights will be the only ones affected by
-		the command except for if the Action parameter is set to "colorloop",
-		in which case all lights are always affected.
+		the command. Order does not matter, except for in the case of a
+		"colorloop" action.
 	</p>
 </div>
 
@@ -110,7 +122,7 @@
 		selected lights on. "off" turns the selected lights off. "blink"
 		alternates between a given color and the off state. "alternate"
 		alternates between the two given colors. "colorloop" rotates a color
-		across the lights in order.
+		across the lights in the specified order.
 	</p>
 </div>
 
@@ -218,7 +230,7 @@
 <h3>BlinkDelay</h3>
 <div class="tabbed">
 	<p>
-		Required: if "blink", "alternate", or "colorloop" are used<br />
+		Required: no<br />
 		Type: number<br />
 		Accepted Values: [1, 5000]
 	</p>
@@ -227,6 +239,7 @@
 		should be on and off. If the action value is "alternate", BlinkDelay
 		controls how long each color should be on. If the action value is
 		"colorloop", BlinkDelay controls how long the color should be at each
-		bulb. This value is measured in milliseconds.
+		bulb. If no value is provided, the default value of 500 is used. This
+		value is measured in milliseconds.
 	</p>
 </div>
