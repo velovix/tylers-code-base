@@ -10,6 +10,7 @@
 <il class="table-of-contents">
 	<li><a href="#communication-basics">Communication Basics</a></li>
 	<li><a href="#data-structure">Data Structure</a></li>
+	<li><a href="#json-examples">JSON Examples</a></li>
 </il>
 
 <a name="communication-basics"></a>
@@ -92,7 +93,23 @@
 		Accepted Values: any string
 	</p>
 	<p>
-		The password for accessing the light server.
+		The password for accessing the light server. This attribute must always
+		be at the bottom layer of the JSON object.
+	</p>
+</div>
+
+<h3>Sync</h3>
+<div class="tabbed">
+	<p>
+		Required: no<br />
+		Type: array of objects<br />
+		Accepted Values: completed light commands
+	</p>
+	<p>
+		An array of light commands that will be run at the same time. Anything
+		in the immediate JSON object besides the key will be ignored if this
+		attribute is set. If the Sync attribute is not set, the light command
+		information should go in the lowest level JSON object.
 	</p>
 </div>
 
@@ -243,3 +260,75 @@
 		value is measured in milliseconds.
 	</p>
 </div>
+
+<a name="json-examples"></a>
+<h2>JSON Examples</h2>
+
+<p>
+	A simple command that alternates between red and green on the first six
+	lights five times:
+
+	<div class="code">
+		{<br />
+		<div class="tabbed">
+			"Key": "yourpassword",<br />
+			"Lights": [0, 1, 2, 3, 4, 5],<br />
+			"Action": "alternate",<br />
+			"R": 255,<br />
+			"G": 0,<br />
+			"B": 0,<br />
+			"R2": 0,<br />
+			"G2": 255,<br />
+			"B2": 0,<br />
+			"TransitionTime": 200,<br />
+			"BlinkCount": 5<br />
+		</div>
+		}
+	</div>
+</p>
+
+<p>
+	A command that alternates between red and green on the first three
+	even-numbered lights and green and red on the first three odd-numbered
+	lights at the same time, five times each:
+
+	<div class="code">
+		{<br />
+		<div class="tabbed">
+			"Key": "yourpassword",<br />
+			"Sync": [<br />
+			<div class="tabbed">
+				{<br />
+				<div class="tabbed">
+					"Lights": [0, 2, 4],<br />
+					"Action": "alternate",<br />
+					"R": 255,<br />
+					"G": 0,<br />
+					"B": 0,<br />
+					"R2": 0,<br />
+					"G2": 255,<br />
+					"B2": 0,<br />
+					"TransitionTime": 200,<br />
+					"BlinkCount": 5<br />
+				</div>
+				},<br />
+				{<br />
+				<div class="tabbed">
+					"Lights": [1, 3, 5],<br />
+					"Action": "alternate",<br />
+					"R": 0,<br />
+					"G": 255,<br />
+					"B": 0,<br />
+					"R2": 255,<br />
+					"G2": 0,<br />
+					"B2": 0,<br />
+					"TransitionTime": 200,<br />
+					"BlinkCount": 5<br />
+				</div>
+				}<br />
+			</div>
+			]<br />
+		</div>
+		}
+	</div>
+</p>
