@@ -1,0 +1,75 @@
+<h2>Introduction</h2>
+
+<p>
+	Sndsvr is an API for playing the audio from Youtube videos on speakers
+	remotely. If the audio has never been played before, it downloads the audio
+	first and then plays it. The audio is cached for future use.
+</p>
+
+<h2>Table of Contents</h2>
+<il class="table-of-contents">
+	<li><a href="#data-structure">Data Structure</a></li>
+	<li><a href="#json-examples">JSON Examples</a></li>
+</il>
+
+<a name="data-structure"></a>
+<h2>Data Structure</h2>
+
+<h3>Key</h3>
+<div class="tabbed">
+	<p>
+		Required: yes<br />
+		Type: string<br />
+		Accepted Values: any string
+	</p>
+	<p>
+		The password for accessing the sound server. This attribute must always
+		be at the bottom layer of the JSON object.
+	</p>
+</div>
+
+<h3>ID</h3>
+<div class="tabbed">
+	<p>
+		Required: yes<br />
+		Type: string<br />
+		Accepted Values: youtube video ID
+	</p>
+	<p>
+		The Youtube video ID to be played. The video ID can be found by looking
+		at the URL. A standard Youtube URL is in the format
+		"http://www.youtube.com/watch?v=xxxxxxxxxx" where the x's are the video
+		ID.
+	</p>
+</div>
+
+<h3>Volume</h3>
+<div class="tabbed">
+	<p>
+		Required: no<br />
+		Type: number int<br />
+		Accepted Values: [0, 100]
+	</p>
+	<p>
+		The volume to play the audio at. The default is 50.
+	</p>
+</div>
+
+<a name="json-examples"></a>
+<h2>JSON Examples</h2>
+
+<p>
+	A command that plays the "Wow! Montage Parody" audio at volume 60 looks
+	like this:
+
+	<div class="code">
+		{<br />
+		<div class="tabbed">
+			"Key": "yourpassword",<br />
+			"ID": "Xm_dS-wEFvs",<br />
+			"Volume": 60<br />
+		</div>
+		}
+	</div>
+</p>
+
