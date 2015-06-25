@@ -9,22 +9,22 @@ func init() {
 
 	log.SetFlags(log.Ldate | log.Ltime)
 
-	homepage, err := NewResponse("./views/index.html")
+	homepage, err := newResponse("./views/index.html")
 	if err != nil {
 		panic(err)
 	}
 
-	favicon, err := NewResponse("./public/favicon.ico")
+	favicon, err := newResponse("./public/favicon.ico")
 	if err != nil {
 		panic(err)
 	}
 
-	sd, err := NewStaticDirectory("./public/", "/public/")
+	sd, err := newStaticDirectory("./public/", "/public/")
 	if err != nil {
 		panic(err)
 	}
 
-	docPage := DocPage{}
+	docPage := documentation{}
 
 	http.Handle("/", homepage)
 	http.Handle("/docs/", docPage)

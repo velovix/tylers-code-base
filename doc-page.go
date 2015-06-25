@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type DocPage struct {
+type documentation struct {
 }
 
 type docPageData struct {
@@ -15,12 +15,12 @@ type docPageData struct {
 	Text  template.HTML
 }
 
-func NewDocPage() DocPage {
+func newDocumentation() documentation {
 
-	return DocPage{}
+	return documentation{}
 }
 
-func (docPage DocPage) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (doc documentation) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	page := r.URL.Path[len("/docs/"):]
 

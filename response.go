@@ -8,28 +8,28 @@ import (
 	"time"
 )
 
-type Response struct {
+type response struct {
 	file string
 }
 
-func NewResponse(filename string) (Response, error) {
+func newResponse(filename string) (response, error) {
 
 	_, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return Response{""}, err
+		return response{""}, err
 	}
 
-	return Response{filename}, nil
+	return response{filename}, nil
 }
 
-func (response Response) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (resp response) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	file, err := os.Open(response.file)
+	file, err := os.Open(resp.file)
 	if err != nil {
-		fmt.Fprint(w, "404 file error: %s", response.file)
+		fmt.Fprint(w, "404 file error: %s", resp.file)
 		return
 	}
 
 	var zeroTime time.Time
-	http.ServeContent(w, r, response.file, zeroTime, file)
+	http.ServeContent(w, r, resp.file, zeroTime, file)
 }

@@ -8,24 +8,24 @@ import (
 	"time"
 )
 
-type StaticDirectory struct {
+type staticDirectory struct {
 	path    string
 	trigger string
 }
 
-func NewStaticDirectory(path, trigger string) (StaticDirectory, error) {
+func newStaticDirectory(path, trigger string) (staticDirectory, error) {
 
 	_, err := ioutil.ReadDir(path)
 	if err != nil {
-		return StaticDirectory{"", ""}, err
+		return staticDirectory{"", ""}, err
 	}
 
-	return StaticDirectory{path, trigger}, nil
+	return staticDirectory{path, trigger}, nil
 }
 
-func (staticDirectory StaticDirectory) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (sd staticDirectory) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	trimmedDir := staticDirectory.path + r.URL.Path[len(staticDirectory.trigger):]
+	trimmedDir := sd.path + r.URL.Path[len(sd.trigger):]
 
 	file, err := os.Open(trimmedDir)
 	if err != nil {
