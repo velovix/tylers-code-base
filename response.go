@@ -52,6 +52,10 @@ func newResponse(filename string) (*response, error) {
 				resp.mutex.Lock()
 				if event.Op&fsnotify.Write == fsnotify.Write {
 					log.Println("modified file:", resp.filename)
+					resp.data, err = ioutil.ReadFile(filename)
+					if err != nil {
+						log.Println(err)
+					}
 				}
 				resp.mutex.Unlock()
 			case err := <-resp.watcher.Errors:
