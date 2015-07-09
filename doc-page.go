@@ -11,10 +11,14 @@ import (
 	"gopkg.in/fsnotify.v1"
 )
 
-const documentationFile = "./views/documentation.html"
+const (
+	documentationFile = "./views/documentation.html"
+	docDataLocation   = "./public/docs/"
+)
 
 type documentation struct {
 	mutex        sync.Mutex
+	watcher      *fsnotify.Watcher
 	pageData     map[string]*[]byte
 	pageWatchers map[string]*fsnotify.Watcher
 }
@@ -26,7 +30,34 @@ type docPageData struct {
 
 func newDocumentation() (*documentation, error) {
 
+	var err error
 	var doc documentation
+
+	// Start watching the doc template file
+	doc.watcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		return &documentation{}, err
+	}
+	err = doc.watcher.Add(documentationFile)
+	if err != nil {
+		return &documentation{}, err
+	}
+	go func() {
+		for {
+			select {
+			case event := <-doc.watcher.Events:
+				doc.mutex.Lock()
+				if event.Op&fsnotify.Write == fsnotify.Write {
+					log.Println("modified file:", documentationFile)
+					// Clear the cache if the doc template has been modified
+					doc.pageData = make(map[string]*[]byte)
+				}
+				doc.mutex.Unlock()
+			case err := <-doc.watcher.Errors:
+				log.Println(err)
+			}
+		}
+	}()
 
 	doc.pageData = make(map[string]*[]byte)
 	doc.pageWatchers = make(map[string]*fsnotify.Watcher)
@@ -45,15 +76,15 @@ func (doc *documentation) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		doc.mutex.Lock()
 
 		// Parse the generic documentation template
-		t, err := template.ParseFiles("./views/documentation.html")
+		t, err := template.ParseFiles(documentationFile)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
 		// Read the documentation data file
-		textData, err := ioutil.ReadFile("./public/docs/" + page + ".html")
+		textData, err := ioutil.ReadFile(docDataLocation + page + ".html")
 		if err != nil {
-			textData, _ = ioutil.ReadFile("./public/docs/unknown.html")
+			textData, _ = ioutil.ReadFile(docDataLocation + "unknown.html")
 			page = "unknown"
 		}
 
@@ -73,6 +104,10 @@ func (doc *documentation) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		err = doc.pageWatchers[page].Add("./public/docs/" + page + ".html")
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		go newFileUpdater(doc.pageWatchers[page], &doc.mutex, doc.pageData[page], "./public/docs/"+page+".html")()
 
 		// Return results
