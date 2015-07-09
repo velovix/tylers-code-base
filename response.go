@@ -2,7 +2,6 @@ package tylerscodebase
 
 import (
 	"io/ioutil"
-	"log"
 	"mime"
 	"net/http"
 	"strings"
@@ -45,24 +44,7 @@ func newResponse(filename string) (*response, error) {
 	if err != nil {
 		return &response{}, err
 	}
-	go func() {
-		for {
-			select {
-			case event := <-resp.watcher.Events:
-				resp.mutex.Lock()
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					log.Println("modified file:", resp.filename)
-					resp.data, err = ioutil.ReadFile(filename)
-					if err != nil {
-						log.Println(err)
-					}
-				}
-				resp.mutex.Unlock()
-			case err := <-resp.watcher.Errors:
-				log.Println(err)
-			}
-		}
-	}()
+	go newFileUpdater(resp.watcher, &resp.mutex, &resp.data, resp.filename)()
 
 	return &resp, nil
 }
