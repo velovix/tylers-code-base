@@ -49,11 +49,6 @@ func init() {
 		panic(err)
 	}
 
-	/*sd, err := newStaticDirectory("./public/", "/public/")
-	if err != nil {
-		panic(err)
-	}*/
-
 	doc, err := newDocumentation()
 	if err != nil {
 		panic(err)
@@ -62,5 +57,4 @@ func init() {
 	http.Handle("/", homepage)
 	http.Handle("/docs/", doc)
 	http.Handle("/favicon.ico", favicon)
-	//http.Handle("/public/", sd)
 }
