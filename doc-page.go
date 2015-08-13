@@ -10,7 +10,7 @@ import (
 
 const (
 	documentationFile = "./views/documentation.html"
-	docDataLocation   = "./public/docs/"
+	docDataLocation   = "./views/docs/"
 )
 
 type documentation struct {
