@@ -14,7 +14,7 @@ func init() {
 		panic(err)
 	}
 
-	favicon, err := newResponse("./public/favicon.ico")
+	favicon, err := newResponse("./views/favicon.ico")
 	if err != nil {
 		panic(err)
 	}
